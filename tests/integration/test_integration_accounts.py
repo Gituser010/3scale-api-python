@@ -1,3 +1,7 @@
+import secrets
+
+import pytest
+
 from tests.integration import asserts
 
 
@@ -9,6 +13,12 @@ def test_accounts_list(api, account):
 def test_account_can_be_created(api, account, account_params):
     asserts.assert_resource(account)
     asserts.assert_resource_params(account, account_params)
+
+
+def test_account_can_be_updated(api,account,update_account_params):
+    updated_account = account.update(params=update_account_params)
+    asserts.assert_resource(updated_account)
+    asserts.assert_resource_params(updated_account,update_account_params)
 
 
 def test_account_can_be_read(api, account, account_params):
