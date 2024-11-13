@@ -30,5 +30,16 @@ def test_account_can_be_read_by_name(api, account, account_params):
     asserts.assert_resource_params(read, account_params)
 
 
+def test_account_can_be_find_by_name(api, account, account_params):
+    account2 = api.accounts.find(dict(username=account.users.list().pop(0)['username']))
+    asserts.assert_resource(account2)
+    asserts.assert_resource_params(account2, account_params)
+
+
+def test_account_get_plan(account):
+    plan =  account.get_plan()
+    plan['account_plan']['name'] = 'Default'
+
+
 def test_users_list(api, account):
     assert len(account.users.list()) >= 1

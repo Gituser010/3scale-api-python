@@ -13,7 +13,7 @@ from threescale_api.resources import (Service, ApplicationPlan, Application,
                                       Proxy, Backend, Metric, MappingRule,
                                       BackendMappingRule, BackendUsage,
                                       ActiveDoc, Webhooks, InvoiceState,
-                                      ApplicationKey, ApplicationPlans)
+                                      ApplicationKey, ApplicationPlans, AccountUser, AccountUsers)
 
 load_dotenv()
 
@@ -122,6 +122,26 @@ def account(account_params, api):
     yield entity
     cleanup(entity)
 
+
+@pytest.fixture(scope='module')
+def account_user_update_params():
+    suffix = get_suffix()
+    name = f"test-update-{suffix}"
+    return dict(name=name, username=name, email=f"{name}@email.com")
+
+
+@pytest.fixture(scope='module')
+def account_user_params():
+    suffix = get_suffix()
+    name = f"test-{suffix}"
+    return dict(name=name, username=name, email=f"{name}@email.com")
+
+
+@pytest.fixture(scope='module')
+def account_user(account,account_user_params) -> AccountUser:
+    user = account.users.create(account_user_params)
+    yield user
+    cleanup(user)
 
 @pytest.fixture(scope='module')
 def application_plan_params() -> dict:
